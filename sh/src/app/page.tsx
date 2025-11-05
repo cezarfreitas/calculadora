@@ -9,7 +9,6 @@ import InstallmentsTable from '@/components/InstallmentsTable';
 import SummarySection from '@/components/SummarySection';
 import ResultSection from '@/components/ResultSection';
 import { ToastContainer } from '@/components/ui/toast';
-import RichTextEditor from '@/components/RichTextEditor';
 import { formatCurrency, formatDateBR, formatDateToInput, parseCurrencyValue, getTodayDateString } from '@/lib/formatters';
 import { validatePaymentData } from '@/lib/validations';
 
@@ -69,7 +68,6 @@ export default function Home() {
   const [copied, setCopied] = useState<boolean>(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-  const [editorContent, setEditorContent] = useState<string>('');
 
   // Função para adicionar toast
   const addToast = useCallback((message: string, type: 'success' | 'error' | 'info' = 'info') => {
@@ -348,13 +346,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white py-4">
       <div className="max-w-4xl mx-auto px-4 space-y-4">
-        {/* Editor de Texto Rico */}
-        <RichTextEditor
-          content={editorContent}
-          onChange={setEditorContent}
-          placeholder="Digite seu texto aqui... Você pode formatar, adicionar imagens e links."
-        />
-
         <Card className="border border-gray-200">
           <CardContent className="p-4 space-y-4">
             <PaymentForm

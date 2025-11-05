@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // Configurar root do Turbopack para evitar warning de múltiplos lockfiles
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   // Melhor compatibilidade com browsers antigos
   compiler: {
     // Remover console.log em produção (opcional)
