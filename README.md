@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Calculadora de Parcelamentos
 
-## Getting Started
+Calculadora de pagamentos e parcelas desenvolvida com Next.js, React e TypeScript.
 
-First, run the development server:
+## 🚀 Funcionalidades
+
+- Calculadora de parcelas com diferentes formas de pagamento
+- Cálculo de entrada e descontos
+- Geração de resultados formatados com quebras de linha
+- Interface moderna e responsiva
+- Suporte a múltiplas parcelas e intervalos personalizados
+
+## 📋 Pré-requisitos
+
+- Node.js 18+ 
+- npm ou yarn
+
+## 🛠️ Instalação
 
 ```bash
+# Instalar dependências
+npm install
+
+# Executar em desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build para produção
+npm run build
+
+# Iniciar servidor de produção
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) no navegador para ver o resultado.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📚 Context7 MCP - Documentação
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Este projeto está configurado para usar o Context7 MCP para acesso à documentação de bibliotecas.
 
-## Learn More
+Para configurar o Context7 MCP no Cursor, consulte o arquivo [CONTEXT7_MCP.md](./CONTEXT7_MCP.md) para instruções detalhadas.
 
-To learn more about Next.js, take a look at the following resources:
+### Bibliotecas Documentadas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Next.js 15.5.4
+- React 19.1.0
+- TypeScript 5
+- Tailwind CSS 4
+- Radix UI Components
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🏗️ Estrutura do Projeto
 
-## Deploy on Vercel
+```
+src/
+├── app/              # Páginas e layouts do Next.js
+│   ├── layout.tsx    # Layout principal
+│   └── page.tsx      # Página inicial
+├── components/       # Componentes React
+│   ├── PaymentForm.tsx
+│   ├── InstallmentsTable.tsx
+│   ├── ResultSection.tsx
+│   ├── SummarySection.tsx
+│   └── ui/           # Componentes UI (shadcn/ui)
+└── lib/              # Utilitários
+    └── utils.ts
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧩 Tecnologias
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js 15.5.4** - Framework React
+- **React 19.1.0** - Biblioteca UI
+- **TypeScript 5** - Tipagem estática
+- **Tailwind CSS 4** - Estilização
+- **Radix UI** - Componentes acessíveis
+- **shadcn/ui** - Componentes UI
+
+## 📖 Documentação
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://react.dev)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Context7 MCP Setup](./CONTEXT7_MCP.md)
+- [Compatibilidade entre Browsers e OS](./BROWSER_COMPATIBILITY.md)
+
+## 🚢 Deploy
+
+O projeto pode ser deployado em:
+
+- **Vercel** (recomendado para Next.js)
+- **Docker** (usando o Dockerfile incluído)
+- Qualquer plataforma que suporte Node.js
+
+### Deploy com Docker
+
+```bash
+# Build da imagem
+docker build -t payment-calculator .
+
+# Executar container
+docker run -p 3000:3000 payment-calculator
+```
+
+## 📝 Licença
+
+Este projeto é privado.
