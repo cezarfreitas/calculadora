@@ -22,6 +22,7 @@ export interface PaymentData {
   installmentInterval: number;
   firstInstallmentTerm: number;
   dueDay: number;
+  defaultPaymentMethod: string;
 }
 
 export interface Installment {
@@ -46,15 +47,16 @@ interface Toast {
 
 export default function Home() {
   const [paymentData, setPaymentData] = useState<PaymentData>({
-    referenceValue: 0,
+    referenceValue: 1,
     paymentMethod: 'PARCELADO',
-    installments: 1,
+    installments: 0,
     entryDate: getTodayDateString(),
-    downPayment: 100,
+    downPayment: 0,
     discount: 0,
     installmentInterval: 30,
     firstInstallmentTerm: 0,
     dueDay: 0,
+    defaultPaymentMethod: 'Boleto',
   });
 
   const [installments, setInstallments] = useState<Installment[]>([]);
@@ -91,7 +93,7 @@ export default function Home() {
         description: 'À vista',
         value: cashValue,
         dueDate: paymentData.entryDate,
-        paymentMethod: 'Boleto',
+        paymentMethod: paymentData.defaultPaymentMethod,
       });
     }
 
@@ -159,13 +161,13 @@ export default function Home() {
           description: `${i}ª parcela`,
           value: installmentValue,
           dueDate: formatDateToInput(dueDate),
-          paymentMethod: 'Boleto',
+          paymentMethod: paymentData.defaultPaymentMethod,
         });
       }
     }
 
     setInstallments(newInstallments);
-  }, [paymentData.downPayment, paymentData.entryDate, paymentData.installments, paymentData.firstInstallmentTerm, paymentData.installmentInterval, paymentData.dueDay]);
+  }, [paymentData.downPayment, paymentData.entryDate, paymentData.installments, paymentData.firstInstallmentTerm, paymentData.installmentInterval, paymentData.dueDay, paymentData.defaultPaymentMethod]);
 
   // Validar dados antes de calcular
   const validationErrorsMemo = useMemo(() => {
@@ -299,15 +301,16 @@ export default function Home() {
   // Função para limpar formulário
   const clearForm = useCallback(() => {
     setPaymentData({
-      referenceValue: 0,
+      referenceValue: 1,
       paymentMethod: 'PARCELADO',
-      installments: 1,
+      installments: 0,
       entryDate: getTodayDateString(),
-      downPayment: 100,
+      downPayment: 0,
       discount: 0,
       installmentInterval: 30,
       firstInstallmentTerm: 0,
       dueDay: 0,
+      defaultPaymentMethod: 'Boleto',
     });
     setInstallments([]);
     setSummary({ subtotal: 0, financialDiscount: 0, total: 0 });
@@ -345,62 +348,71 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white py-4">
-      <div className="max-w-4xl mx-auto px-4 space-y-4">
-        <Card className="border border-gray-200">
-          <CardContent className="p-4 space-y-4">
-            <PaymentForm
-              paymentData={paymentData}
-              setPaymentData={setPaymentData}
-              formatCurrency={formatCurrency}
-              validationErrors={validationErrors}
-            />
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Primeira Linha - Duas Colunas */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Coluna Esquerda - Formulário e Resultado */}
+          <div className="space-y-4">
+            <Card className="border border-gray-200">
+              <CardContent className="p-4 space-y-4">
+                <PaymentForm
+                  paymentData={paymentData}
+                  setPaymentData={setPaymentData}
+                  formatCurrency={formatCurrency}
+                  validationErrors={validationErrors}
+                />
 
-            <InstallmentsTable
-              installments={installments}
-              setInstallments={setInstallments}
-              formatCurrency={formatCurrency}
-              formatDateBR={formatDateBR}
-            />
+                <SummarySection summary={summary} formatCurrency={formatCurrency} />
 
-            <SummarySection summary={summary} formatCurrency={formatCurrency} />
+                <div className="flex flex-wrap justify-center gap-2 pt-3 border-t border-gray-200">
+                  <Button 
+                    variant="outline" 
+                    onClick={generateResult} 
+                    size="sm" 
+                    className="border-gray-300 text-black hover:bg-gray-50 transition-colors"
+                    aria-label="Gerar resultado do cálculo"
+                  >
+                    Gerar Resultado
+                  </Button>
+                  {showResult && (
+                    <Button 
+                      variant="outline" 
+                      onClick={copyResult} 
+                      size="sm" 
+                      className="border-gray-300 text-black hover:bg-gray-50 transition-colors"
+                      aria-label={copied ? 'Resultado copiado' : 'Copiar resultado'}
+                    >
+                      {copied ? 'Copiado!' : 'Copiar'}
+                    </Button>
+                  )}
+                  <Button 
+                    variant="outline" 
+                    onClick={clearForm} 
+                    size="sm" 
+                    className="border-gray-300 text-black hover:bg-gray-50 transition-colors"
+                    aria-label="Limpar formulário"
+                  >
+                    Limpar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
-            <div className="flex flex-wrap justify-center gap-2 pt-3 border-t border-gray-200">
-              <Button 
-                variant="outline" 
-                onClick={generateResult} 
-                size="sm" 
-                className="border-gray-300 text-black hover:bg-gray-50 transition-colors"
-                aria-label="Gerar resultado do cálculo"
-              >
-                Gerar Resultado
-              </Button>
-              {showResult && (
-                <Button 
-                  variant="outline" 
-                  onClick={copyResult} 
-                  size="sm" 
-                  className="border-gray-300 text-black hover:bg-gray-50 transition-colors"
-                  aria-label={copied ? 'Resultado copiado' : 'Copiar resultado'}
-                >
-                  {copied ? 'Copiado!' : 'Copiar'}
-                </Button>
-              )}
-              <Button 
-                variant="outline" 
-                onClick={clearForm} 
-                size="sm" 
-                className="border-gray-300 text-black hover:bg-gray-50 transition-colors"
-                aria-label="Limpar formulário"
-              >
-                Limpar
-              </Button>
-            </div>
-
+            {/* Resultado abaixo dos botões */}
             {showResult && (
               <ResultSection resultText={resultText} />
             )}
-          </CardContent>
-        </Card>
+          </div>
+
+          {/* Coluna Direita - Parcelas */}
+          <InstallmentsTable
+            installments={installments}
+            setInstallments={setInstallments}
+            formatCurrency={formatCurrency}
+            formatDateBR={formatDateBR}
+          />
+        </div>
+
         <ToastContainer toasts={toasts} removeToast={removeToast} />
       </div>
     </div>

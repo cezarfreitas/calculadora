@@ -2,13 +2,24 @@
  * Utilitários de formatação reutilizáveis
  */
 
-// Função auxiliar para obter data de hoje no formato YYYY-MM-DD
+// Função auxiliar para obter data de hoje no formato YYYY-MM-DD no fuso horário do Brasil
 export const getTodayDateString = (): string => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  try {
+    // Obter data no fuso horário do Brasil (GMT-3 / America/Sao_Paulo)
+    const today = new Date();
+    const brazilTime = new Date(today.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+    const year = brazilTime.getFullYear();
+    const month = String(brazilTime.getMonth() + 1).padStart(2, '0');
+    const day = String(brazilTime.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  } catch {
+    // Fallback caso o navegador não suporte timeZone
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 };
 
 // Fallback para formatação de moeda
@@ -45,16 +56,20 @@ export const formatDateBR = (dateString: string): string => {
   if (!dateString) return '';
   
   try {
-    const date = new Date(dateString);
+    // Adicionar 'T00:00:00' para garantir que seja tratada como local date
+    const date = new Date(dateString + 'T00:00:00');
     if (isNaN(date.getTime())) {
       return dateString;
     }
 
     if (typeof Intl !== 'undefined' && typeof Intl.DateTimeFormat !== 'undefined') {
       try {
-        return date.toLocaleDateString('pt-BR', {
+        return new Intl.DateTimeFormat('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
           timeZone: 'America/Sao_Paulo'
-        });
+        }).format(date);
         } catch {
           return formatDateFallback(date);
         }
