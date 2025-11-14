@@ -49,7 +49,7 @@ export default function Home() {
   const [paymentData, setPaymentData] = useState<PaymentData>({
     referenceValue: 1,
     paymentMethod: 'PARCELADO',
-    installments: 0,
+    installments: 1,
     entryDate: getTodayDateString(),
     downPayment: 0,
     discount: 0,
@@ -303,7 +303,7 @@ export default function Home() {
     setPaymentData({
       referenceValue: 1,
       paymentMethod: 'PARCELADO',
-      installments: 0,
+      installments: 1,
       entryDate: getTodayDateString(),
       downPayment: 0,
       discount: 0,

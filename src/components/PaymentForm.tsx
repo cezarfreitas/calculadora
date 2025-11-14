@@ -14,13 +14,13 @@ interface PaymentFormProps {
 
 export default function PaymentForm({ paymentData, setPaymentData, formatCurrency, validationErrors = {} }: PaymentFormProps) {
   const handleInputChange = (field: keyof PaymentData, value: string | number) => {
-    // Se mudar para À VISTA, zerar entrada e parcelas
+    // Se mudar para À VISTA, zerar entrada e setar 1 parcela
     if (field === 'paymentMethod' && value === 'A_VISTA') {
       setPaymentData({ 
         ...paymentData, 
         [field]: value,
         downPayment: 0,
-        installments: 0
+        installments: 1
       });
     } else {
       setPaymentData({ ...paymentData, [field]: value });
